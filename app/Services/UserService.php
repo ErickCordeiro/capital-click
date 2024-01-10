@@ -2,12 +2,13 @@
 
 namespace App\Services;
 
-use App\Repositories\WalletRepository;
+use App\Models\User;
+use App\Repositories\UserRepository;
 
-class WalletService
+class UserService
 {
     public function __construct(
-        protected WalletRepository $repository
+        protected UserRepository $repository
     ) {
     }
 
@@ -18,5 +19,16 @@ class WalletService
             page: $page,
             filter: $filter
         );
+    }
+
+    public function getByEmail(string $email): ?User
+    {
+        $user = $this->repository->getByEmail($email);
+
+        if (!$user) {
+            return null;
+        }
+
+        return $user;
     }
 }

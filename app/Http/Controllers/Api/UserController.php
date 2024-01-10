@@ -1,26 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\UserResource;
-use App\Services\WalletService;
+use App\Http\Controllers\Controller;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 
-class WalletController extends Controller
+class UserController extends Controller
 {
-
     public function __construct(
-        protected WalletService $walletService
-    ) {
-    }
+        protected UserService $userService
+    ) {}
 
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $wallets = $this->walletService->getAll($request->filter ?? '');
-        return UserResource::collection($wallets);
+        return $this->userService->getPaginate(
+            totalPerPage: $request->total_per_page ?? 15,
+            page: $request->page ?? 1,
+            filter: $request->filter ?? ''
+        );
     }
 
     /**
